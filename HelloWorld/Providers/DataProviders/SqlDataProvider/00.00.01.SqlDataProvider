@@ -1,0 +1,117 @@
+﻿/************************************************************/
+/*****              SqlDataProvider                     *****/
+/*****                                                  *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}AdminTable') AND type in (N'U'))
+DROP TABLE {databaseOwner}{objectQualifier}AdminTable
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}ArticleTable') AND type in (N'U'))
+DROP TABLE {databaseOwner}{objectQualifier}ArticleTable
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'{databaseOwner}{objectQualifier}StatusTable') AND type in (N'U'))
+DROP TABLE {databaseOwner}{objectQualifier}StatusTable
+GO
+
+
+CREATE TABLE {databaseOwner}{objectQualifier}ArticleTable
+    (
+        [ID] INT NOT NULL IDENTITY (1, 1)
+                CONSTRAINT [PK_ArticleTable] PRIMARY KEY CLUSTERED,
+
+ 
+
+        [Title] NVARCHAR(64),
+        [Article] NVARCHAR(MAX),
+        [Author] NVARCHAR(64),
+        [Created] [datetime],
+
+ 
+
+
+    )  ON [PRIMARY]
+GO
+
+
+CREATE TABLE {databaseOwner}{objectQualifier}AdminTable
+    (
+	  [ID] INT NOT NULL IDENTITY (1, 1)
+                CONSTRAINT [PK_AdminTable] PRIMARY KEY CLUSTERED,
+
+        [ArticleID] INT,
+
+        [StatusID] INT
+
+        
+    )  ON [PRIMARY]
+GO
+
+ 
+
+ALTER TABLE {databaseOwner}{objectQualifier}AdminTable WITH NOCHECK ADD CONSTRAINT [FK_ArticleTable_AdminTable] FOREIGN KEY ([ArticleID])
+    REFERENCES {databaseOwner}{objectQualifier}ArticleTable ([ID])
+    ON DELETE CASCADE
+GO
+ 
+
+CREATE TABLE {databaseOwner}{objectQualifier}StatusTable
+    (
+        [ID] INT NOT NULL IDENTITY (1, 1)
+                CONSTRAINT [PK_StatusTable] PRIMARY KEY CLUSTERED,
+
+ 
+
+        [StatusName] NVARCHAR(64),
+
+
+ 
+
+    )  ON [PRIMARY]
+GO
+
+ 
+
+ALTER TABLE {databaseOwner}{objectQualifier}AdminTable WITH NOCHECK ADD CONSTRAINT [FK_StatusTable_AdminTable] FOREIGN KEY ([StatusID])
+    REFERENCES {databaseOwner}{objectQualifier}StatusTable ([ID])
+    ON DELETE CASCADE
+GO
+
+ 
+
+INSERT INTO [ArticleTable] (
+    [Title], [Article], [Author], [Created]
+    ) VALUES
+    ('Garden', 'loremipsumloremipsum', 'Johnny', GETDATE()),
+    ('Gardens','loremipsumloremipsum', 'Mama', GETDATE()),
+    ('Gardening', 'loremipsumloremipsum', 'Me', GETDATE());
+GO
+
+INSERT INTO [StatusTable] (
+    [StatusName]
+    ) VALUES
+    ('Approved'),
+    ('Rejected'),
+    ('Pending');
+GO
+
+INSERT INTO [AdminTable] (
+    [ArticleID], [StatusID]
+    ) VALUES
+    (1, 3),
+    (2, 2),
+    (3, 1);
+GO
+
+ 
+
+
+/************************************************************/
+/*****              SqlDataProvider                     *****/
+/************************************************************/

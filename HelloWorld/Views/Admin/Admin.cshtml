@@ -1,0 +1,39 @@
+﻿﻿@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage<List<StockY.Dnn.HelloWorld.Models.ArticleTable>>
+
+@{
+    ViewBag.Title = "Admin";
+    Layout = "~/desktopmodules/mvc/helloworld/Views/Shared/_Layout.cshtml";
+}
+
+<div class="fent">
+    <a href="@Url.Action("Index","Index")">
+        <img class="back" src="http://cliparts.co/cliparts/gTe/EqL/gTeEqL6Kc.png" alt="Back" />
+    </a>
+
+    <h1 class="valami">Admin</h1>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Text</th>
+            <th>Author</th>
+            <th>Created</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var articleTable in Model)
+        {
+            <tr>
+                <td>@articleTable.ID</td>
+                <td>@articleTable.Title</td>
+                <td>@articleTable.Article</td>
+                <td>@articleTable.Author</td>
+                <td>@articleTable.Created</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
